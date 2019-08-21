@@ -14,7 +14,7 @@ let ec2 = new AWS.EC2({apiVersion: '2016-11-15'});
 let instanceParams = {
    ImageId: 'ami-06f2f779464715dc5', 
    InstanceType: 't2.micro',
-   KeyName: 'ndoeapp',
+   KeyName: 'bv-key',
    MinCount: 1,
    MaxCount: 1
 };
@@ -32,7 +32,11 @@ instancePromise.then(
     tagParams = {Resources: [instanceId], Tags: [
        {
           Key: 'Name',
-          Value: 'SDK Sample'
+          Value: 'Beam-Me-Up'
+       },
+       {
+         Key: 'Usage',
+         Value: 'Beam-Me-Up'
        }
     ]};
     // Create a promise on an EC2 service object

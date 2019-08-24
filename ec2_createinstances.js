@@ -19,15 +19,14 @@ let instanceParams = {
    MaxCount: 1
 };
 
+function create(){
 // Create a promise on an EC2 service object
 let instancePromise = new AWS.EC2({apiVersion: '2016-11-15'}).runInstances(instanceParams).promise();
 
 // Handle promise's fulfilled/rejected states
-instancePromise.then(
+return instancePromise.then(
   function(data) {
-    console.log(data);
-    var instanceId = data.Instances[0].InstanceId;
-    console.log("Created instance", instanceId);
+    let instanceId = data.Instances[0].InstanceId;
     // Add tags to the instance
     tagParams = {Resources: [instanceId], Tags: [
        {
@@ -42,9 +41,9 @@ instancePromise.then(
     // Create a promise on an EC2 service object
     var tagPromise = new AWS.EC2({apiVersion: '2016-11-15'}).createTags(tagParams).promise();
     // Handle promise's fulfilled/rejected states
-    tagPromise.then(
+    return tagPromise.then(
       function(data) {
-        console.log("Instance tagged");
+        return instanceId;
       }).catch(
         function(err) {
         console.error(err, err.stack);
@@ -53,3 +52,6 @@ instancePromise.then(
     function(err) {
     console.error(err, err.stack);
   });
+};
+
+module.exports = create;

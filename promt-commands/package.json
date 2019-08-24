@@ -17,7 +17,10 @@
   },
   "homepage": "https://github.com/401-midterms-kramer/project-jetpack#readme",
   "dependencies": {
-    "jest": "^24.9.0",
-    "prompt": "^1.0.0"
+    "dotenv": "^8.1.0",
+    "inquirer": "^7.0.0"
+  },
+  "devDependencies": {
+    "jest": "^24.9.0"
   }
 }

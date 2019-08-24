@@ -13,7 +13,7 @@ let ec2 = new AWS.EC2({apiVersion: '2016-11-15'});
 let arr = { values: ['1'] };
 
 function parse(instanceId) {
-  let params = {InstanceIds:[instanceId]}
+  let params = {InstanceIds:[instanceId]};
   arr.values.forEach(function (element) {
       ec2.describeInstances(params, function (err, data) {
           console.log('DNS', data.Reservations[0].Instances[0].PublicDnsName);

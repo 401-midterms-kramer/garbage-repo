@@ -13,5 +13,5 @@ AWS.config.credentials = credentials;
 
 create().then(instanceId => {
   parse(instanceId);
-  // terminate(instanceId);
+  terminate(instanceId);
 });

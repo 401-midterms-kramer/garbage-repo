@@ -13,7 +13,6 @@ let ec2 = new AWS.EC2({apiVersion: '2016-11-15'});
 function terminate(instanceId) {
   let params = {InstanceIds:[instanceId]};
     ec2.terminateInstances(params, function(err, data) {
-      console.log('This is DATA,', data);
       console.log('Terminated,', data.TerminatingInstances[0].InstanceId);
       if (err) { console.log(err, err.stack) } // an error occurred
         else { console.log(data) };

@@ -56,41 +56,36 @@ let questions = [
   },
 ];
 
-//for the dot env file path	
-let filepath = [
-  {
-    type: 'input',
-    name: 'envFilePath',
-    message: 'Please place file path',
-    validate: function (value) {
-      let pass = value.match('.env')
-      if (pass) {
-        return true;
-      }
-      return 'need file path'
-    }
-  }
-];
-
+let portRemover = function(string){
+  let modifiedString = string.split('\n').filter(item => !item.includes('PORT')).join('\n');
+  return modifiedString
+}
 
 inquirer.prompt(questions).then(answers => {
-  //console.log(answers);
+  let repoObj = {}
   let repo = Object.values(answers)[0]
   let repoArray = Object.values(answers)[0].split('/');
-  //console.log(repoArray)
-  //{ 'GitHub Repo': 'https://github.com/401-midterms-kramer/beam-me-up_server' }
+  let envYN = answers['dot-env-file'];
+  let env = '';
+  if (envYN === 'Yes') {
+    console.log('aw shit I need to figure out a .env file parser now');
+    env = fs.readFileSync('../.env').toString();
+    env = portRemover(env);
+  }
   let organization = repoArray[3];
   let reponame = repoArray[4];
   let url = `https://raw.githubusercontent.com/${organization}/${reponame}/master/package.json`
-  //console.log(url)
   superagent.get(url).then(data => {
     let parsePackage = JSON.parse(data.text).main
-    console.log(
-      {
-        repo: `${repo}.git`,
-        repoName: `${reponame}`,
-        entryPoint: `${parsePackage}`,
-        env: `TBD=mlem`
-      })
+    repoObj.repo = `${repo}.git`;
+    repoObj.repoName = `${reponame}`;
+    repoObj.entryPoint = `${parsePackage}`;
+    repoObj.env = `${env}`;
+    const URL = 'ec2-52-32-193-110.us-west-2.compute.amazonaws.com:3000/launch'
+    console.log(repoObj);
+    superagent.post(`${URL}`, repoObj)
+    .auth('lee', 'lee')
+    .then(res => console.log(`your new site is up on ${URL.split(':')[0]}:${res.body.inputObj.port}`))
+    .catch(err => console.err(err))
   })
 });

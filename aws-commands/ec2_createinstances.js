@@ -12,9 +12,9 @@ let ec2 = new AWS.EC2({apiVersion: '2016-11-15'});
 
 // AMI is amzn-ami-2011.09.1.x86_64-ebs
 let instanceParams = {
-   ImageId: 'ami-0d837718892fd4869',
+   ImageId: 'ami-05b7c1459926442c5',
    InstanceType: 't2.micro',
-   KeyName: 'bv-key',
+   KeyName: 'beam-me-up-key-pair',
    MinCount: 1,
    MaxCount: 1
 };

@@ -11,24 +11,27 @@ var params = {
       Values: [
         "ami-05b7c1459926442c5"
       ]
+    },
+    {
+      Name:"instance-state-name",
+      Values: [
+        "running"
+      ]
     }
   ]
 };
-let output = ''
-return ec2.describeInstances(params, function (err, data) {
-  if (err) console.log(err, err.stack); // an error occurred
-  else data.Reservations.forEach(res => res.Instances.forEach(inst => {
-    if (inst.PublicDnsName) {
-      return inst.PublicDnsName
-    }
-    else {}
-  }));           // successful response
-  /*
-  data = {
-  }
-  */
-});
+
+
+module.exports = new Promise((res,rej) => {
+  ec2.describeInstances(params, function (err, data) {
+  if (err) rej(err, err.stack); 
+  else res(data.Reservations[0].Instances[0].PublicDnsName)
+})
+})          
+
+
 //   ec2.waitFor('instanceStatusOk', params, function(err, data) {
 //     if (err) console.log(err, err.stack); // an error occurred
 //     else     console.log(data);           // successful response
 //   });
+

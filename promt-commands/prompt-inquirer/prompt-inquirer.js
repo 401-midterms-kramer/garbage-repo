@@ -4,8 +4,8 @@ const inquirer = require('inquirer');
 const superagent = require('superagent');
 const fs = require('fs');
 require('dotenv');
-
-
+const instanceURLgetter = require('../../aws-commands/leednsattempt.js')
+let instanceURL = ''
 // Prompt question to ask the user in the terimanal
 let questions = [
   {
@@ -56,10 +56,11 @@ let questions = [
   },
 ];
 
-let portRemover = function(string){
+let portRemover = function (string) {
   let modifiedString = string.split('\n').filter(item => !item.includes('PORT')).join('\n');
   return modifiedString
 }
+instanceURLgetter.then(data => instanceURL=data)
 
 inquirer.prompt(questions).then(answers => {
   let repoObj = {}
@@ -81,11 +82,11 @@ inquirer.prompt(questions).then(answers => {
     repoObj.repoName = `${reponame}`;
     repoObj.entryPoint = `${parsePackage}`;
     repoObj.env = `${env}`;
-    const URL = 'ec2-18-237-89-229.us-west-2.compute.amazonaws.com:3000/launch'
+    const URL = `${instanceURL}:3000/launch`
     console.log(repoObj);
     superagent.post(`${URL}`, repoObj)
-    .auth('lee', 'lee')
-    .then(res => console.log(`your new site is up on ${URL.split(':')[0]}:${res.body.inputObj.port}`))
-    .catch(err => console.err(err))
+      .auth('lee', 'lee')
+      .then(res => console.log(`your new site is up on ${URL.split(':')[0]}:${res.body.inputObj.port}`))
+      .catch(err => console.err(err))
   })
 });

@@ -81,7 +81,7 @@ inquirer.prompt(questions).then(answers => {
     repoObj.repoName = `${reponame}`;
     repoObj.entryPoint = `${parsePackage}`;
     repoObj.env = `${env}`;
-    const URL = 'ec2-52-32-193-110.us-west-2.compute.amazonaws.com:3000/launch'
+    const URL = 'ec2-18-237-89-229.us-west-2.compute.amazonaws.com:3000/launch'
     console.log(repoObj);
     superagent.post(`${URL}`, repoObj)
     .auth('lee', 'lee')

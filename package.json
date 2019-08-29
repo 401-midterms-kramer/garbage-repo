@@ -18,6 +18,11 @@
   },
   "homepage": "https://github.com/401-midterms-kramer/garbage-repo#readme",
   "dependencies": {
-    "aws-sdk": "2.514.0"
+    "aws-sdk": "2.514.0",
+    "dotenv": "^8.1.0",
+    "inquirer": "^7.0.0"
+  },
+  "devDependencies": {
+    "jest": "^24.9.0"
   }
 }

@@ -14,6 +14,6 @@ describe('Give a prompts',() =>{
 
 describe('Supertest tests', () => {
     it('tries out the superagent call', () => {
-        
+        expect(prompt.repoQuery({})).toBeUndefined()
     })
 })

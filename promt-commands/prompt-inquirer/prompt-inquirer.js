@@ -79,7 +79,6 @@ inquirer.prompt(questions).then(answers => {
   repoObj.organization = repoArray[3];
   repoObj.repoName = repoArray[4];
   repoQuery(repoObj);
-  // console.log(repoObj);
 });
 
 let repoQuery = function (repoObj) {
@@ -95,4 +94,4 @@ let repoQuery = function (repoObj) {
   })
 }
 
-module.exports = {portRemover};
+module.exports = {portRemover, repoQuery};

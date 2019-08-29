@@ -3,9 +3,10 @@
 const inquirer = require('inquirer');
 const superagent = require('superagent');
 const fs = require('fs');
-require('dotenv');
+require('dotenv').config();
 
-
+const instanceURLgetter = require('../../aws-commands/leednsattempt.js')
+let instanceURL = ''
 // Prompt question to ask the user in the terimanal
 let questions = [
   {
@@ -56,36 +57,45 @@ let questions = [
   },
 ];
 
-let portRemover = function(string){
+let portRemover = function (string) {
   let modifiedString = string.split('\n').filter(item => !item.includes('PORT')).join('\n');
   return modifiedString
 }
 
+instanceURLgetter.then(data => instanceURL=data)
+
 inquirer.prompt(questions).then(answers => {
   let repoObj = {}
-  let repo = Object.values(answers)[0]
+  repoObj.repo = `${Object.values(answers)[0]}.git`;
   let repoArray = Object.values(answers)[0].split('/');
   let envYN = answers['dot-env-file'];
   let env = '';
   if (envYN === 'Yes') {
-    console.log('aw shit I need to figure out a .env file parser now');
-    env = fs.readFileSync('../.env').toString();
+    console.log('aw shucks I need to figure out a .env file parser now');
+    env = fs.readFileSync('./.env').toString();
     env = portRemover(env);
   }
-  let organization = repoArray[3];
-  let reponame = repoArray[4];
-  let url = `https://raw.githubusercontent.com/${organization}/${reponame}/master/package.json`
+  repoObj.env = `${env}`;
+  repoObj.organization = repoArray[3];
+  repoObj.repoName = repoArray[4];
+  repoQuery(repoObj);
+});
+
+let repoQuery = function (repoObj) {
+  let url = `https://raw.githubusercontent.com/${repoObj.organization}/${repoObj.repoName}/master/package.json`
   superagent.get(url).then(data => {
     let parsePackage = JSON.parse(data.text).main
-    repoObj.repo = `${repo}.git`;
-    repoObj.repoName = `${reponame}`;
     repoObj.entryPoint = `${parsePackage}`;
-    repoObj.env = `${env}`;
-    const URL = 'ec2-18-237-89-229.us-west-2.compute.amazonaws.com:3000/launch'
-    console.log(repoObj);
+    const URL = `${instanceURL}:3000/launch`
     superagent.post(`${URL}`, repoObj)
-    .auth('lee', 'lee')
-    .then(res => console.log(`your new site is up on ${URL.split(':')[0]}:${res.body.inputObj.port}`))
-    .catch(err => console.error(err))
-  });
-});
+      .auth('lee', 'lee')
+      .then(res => console.log(`your new site is up on http://${URL.split(':')[0]}:${res.body.inputObj.port}`))
+      .catch(err => console.error(err))
+  })
+
+}
+
+module.exports = {portRemover, repoQuery};
+
+
+

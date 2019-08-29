@@ -19,5 +19,8 @@
   "homepage": "https://github.com/401-midterms-kramer/garbage-repo#readme",
   "dependencies": {
     "aws-sdk": "2.514.0"
+  },
+  "devDependencies": {
+    "aws-sdk-mock": "^4.5.0"
   }
 }

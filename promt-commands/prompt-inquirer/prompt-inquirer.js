@@ -92,6 +92,11 @@ let repoQuery = function (repoObj) {
       .then(res => console.log(`your new site is up on http://${URL.split(':')[0]}:${res.body.inputObj.port}`))
       .catch(err => console.error(err))
   })
+
 }
 
 module.exports = {portRemover, repoQuery};
+
+});
+
+

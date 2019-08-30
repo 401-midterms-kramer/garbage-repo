@@ -1,3 +1,6 @@
+#!/usr/bin/env node
+
+'use strict'
 const AWS = require('aws-sdk');
 AWS.config.update({ region: 'us-west-2' });
 let ec2 = new AWS.EC2({ apiVersion: '2016-11-15' });

@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 'use strict';
 // Load the AWS SDK for Node.js
 let AWS = require('aws-sdk');
